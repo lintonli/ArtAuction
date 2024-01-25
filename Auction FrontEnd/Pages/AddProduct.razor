@@ -1,0 +1,68 @@
+﻿
+@page "/AddProduct"
+@inject NavigationManager Navigation;
+
+<h3>AddProduct</h3>
+<div class="container">
+    <div class="nav">
+        <div class="logo">
+
+            <p>Eddy'sEd</p>
+        </div>
+        <a href="/LogIn">Sell</a>
+        <div class="end">
+            <div class="out">
+                <img src="/Icons/logout_FILL0_wght400_GRAD0_opsz24.svg" alt="" />
+
+            </div>
+            <a href="/">Logout</a>
+        </div>
+    </div>
+    <div class="sidjjebar">
+      
+        <div class="icon">
+            <img src="/Icons/gavel_FILL0_wght400_GRAD0_opsz24.svg" alt="" />
+            <a href="/MyProducts">My Products</a>
+        </div>
+        <div class="icon">
+            <img src="/Icons/orders_FILL0_wght400_GRAD0_opsz24.svg" alt="" />
+            <a href="/AddProducts">Add Product</a>
+        </div>
+        <div class="icon">
+            <img src="/Icons/manage_accounts_FILL0_wght400_GRAD0_opsz24.svg" alt="" />
+            <a href="/account">Account</a>
+        </div>
+    </div>
+    <div class="body">
+       
+        <EditForm Model="@newProduct" OnValidSubmit="HandleValidSubmit">
+             <div class="form">
+            <label for="Name">Name</label>
+            <InputText @bind-Value="newProduct.Name" />
+            <label for="Image">Image</label>
+            <InputText @bind-Value="newProduct.Image" />
+            <label for="Description">Description</label>
+            <InputText @bind-Value="newProduct.Description" />
+            <label for="Price">Bidding Price</label>
+            <InputNumber @bind-Value="newProduct.Price" />
+            <button type="button" @onclick="Addproduct" class="mt-4 btn btn-primary">Add Product</button>
+            </div>
+        </EditForm>
+           
+       
+    </div>
+</div>
+@code {
+    public List<Product> products { get; set; } = new List<Product>();
+    public Product newProduct = new Product();
+    private void Addproduct()
+    {
+
+    }
+    private async Task HandleValidSubmit()
+    {
+        products.Add(newProduct);
+        newProduct = new Product();
+        Navigation.NavigateTo("/MyProducts");
+    }
+}

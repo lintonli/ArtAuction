@@ -1,0 +1,37 @@
+﻿body {
+}
+.container{
+    width:100%;
+    justify-content:center;
+    display:grid;
+}
+.image {
+    
+    height: 50vh;
+    justify-content: center;
+  ;
+    
+}
+.image img{
+    width:auto;
+    height:100%;
+    object-fit:cover;
+}
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* This sets the container height to the full viewport height */
+    width: 100vw; /* This sets the container width to the full viewport width */
+    text-align: center; /* Aligns text to the center */
+}
+.form-group {
+    margin-bottom: 15px; /* Spacing between form groups */
+}
+
+.form-control {
+    width: 300px; /* Set the width of your input fields */
+    padding: 10px;
+    margin: 5px 0; /* Spacing for top and bottom */
+}

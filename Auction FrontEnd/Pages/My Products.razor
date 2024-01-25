@@ -1,0 +1,88 @@
+﻿@page "/MyProducts"
+@inject HttpClient http;
+@inject NavigationManager navigtion;
+<div class="container">
+    <div class="nav">
+        <div class="logo">
+
+            <p>Eddy'sEd</p>
+        </div>
+        <a href="/LogIn">Sell</a>
+        <div class="end">
+            <div class="out">
+                <img src="/Icons/logout_FILL0_wght400_GRAD0_opsz24.svg" alt="" />
+
+            </div>
+            <a href="/">Logout</a>
+        </div>
+    </div>
+   
+        <div class="sidjjebar">
+
+        <div class="icon">
+            <img src="/Icons/gavel_FILL0_wght400_GRAD0_opsz24.svg" alt="" />
+            <a href="/MyProducts">My Products</a>
+        </div>
+        <div class="icon">
+            <img src="/Icons/orders_FILL0_wght400_GRAD0_opsz24.svg" alt="" />
+            <a href="/AddProduct">Add Product</a>
+        </div>
+        <div class="icon">
+            <img src="/Icons/manage_accounts_FILL0_wght400_GRAD0_opsz24.svg" alt="" />
+            <a href="/account">Account</a>
+        </div>
+    </div>
+    
+    <div class="body">
+        <h1>Auction Products</h1>
+        <div class="items">
+            @foreach (var prods in product)
+            {
+                <div class="item1">
+                    <div class="info3">
+                        <img src="@prods.Image" alt="" />
+                        <h1>@prods.Name</h1>
+                        <div class="stat">
+                            <h3>Highest bid: @prods.HighestBid</h3>
+                            <p>@prods.BiddingState</p>
+                        </div>
+                            <div class="cmd">
+                            <button class="btn" @onclick="(e => Delete(prods.Id))">Delete</button>
+                                <button class="edit" @onclick="(e => Edit(prods.Id))">Edit</button>
+                            </div>
+                       
+
+                    </div>
+
+                </div>
+
+            }
+        </div>
+    </div>
+</div>
+@code {
+    public List<Product> product { get; set; } = new List<Product>();
+
+   
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        var Product = await http.GetFromJsonAsync<List<Product>>("sample-data/Product.json");
+
+        if (Product.Any())
+        {
+            product = Product;
+        }
+    }
+
+    private void Delete(Guid Id)
+    {
+
+    }
+    private void Edit(Guid Id)
+    {
+        
+    }
+
+}

@@ -1,0 +1,61 @@
+﻿body {
+}
+.container {
+    background-image: url('\Contact.jpg');
+    background-size: cover;
+    background-position: center center;
+}
+h1 {
+    font-size: 2rem;
+    font-family: Irish Glover;
+}
+.nav{
+   /* float:right;*/
+   /* display:none;*/
+    display:flex;
+  
+    justify-content:flex-end;
+}
+
+
+.links ul {
+        display: flex;
+        gap: 15px;
+        margin-right:10px;
+    }
+.info {
+    display:grid;
+}
+.form{
+    display:grid;
+    
+
+}
+.form input{
+    width:100%;
+    border-radius:10px;
+    gap:10px;
+}
+.form button{
+    justify-content:center;
+    background-color:black;
+    color:white;
+    font-size:1rem;
+    width:50%;
+    border-radius:10px;
+    margin-top:15px;
+}
+.social p{
+    color:blue;
+}
+
+.social ul{
+    color:blue;
+}
+@media(min-width:600px){
+    .info{
+        display:grid;
+        grid-template-columns:1fr 2fr;
+        gap:20px;
+    }
+}

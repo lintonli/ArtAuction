@@ -1,0 +1,56 @@
+﻿@page "/ViewItem/{Id}"
+@inject HttpClient http;
+@inject NavigationManager navigation;
+
+@if (product != null)
+{
+    <div>
+        <img src="@product.Image" alt=""/>
+        <h2>@product.Name</h2>
+        <p>Seller: @product.SellerName</p>
+        <p>Price:@product.Price$</p>
+        <p>Highest Bid: @product.HighestBid</p>
+        <p>Start Time:@product.StartTime</p>
+        <p>End Time: @product.EndTime</p>
+        <p>Bidding State: @product.BiddingState$</p>
+    </div>
+    <form>
+        <label for="Bid">BID</label>
+        <input type="text" placeholder="bid"/>
+    </form>
+}
+
+else
+{
+    <p>Loading........</p>
+}
+<button class="now" @onclick="Bid">Bid Now</button>
+<button @onclick="GoBack"> Go Back</button>
+
+@code{
+   
+    public Product product { get; set; } = new Product();
+
+    [Parameter]
+    public string Id{get; set;}
+
+    protected override async Task OnInitializedAsync(){
+
+        if (Guid.TryParse(Id, out var guidId))
+        {
+            await LoadProduct(guidId);
+        }
+    }
+    public async Task LoadProduct(Guid guidId){
+        var products = await http.GetFromJsonAsync<List<Product>>("sample-data/Product.json");
+        product = products.FirstOrDefault(p => p.Id == guidId);
+          
+        
+    }
+    private void GoBack(){
+        navigation.NavigateTo("/Bidder");
+    }
+    public void Bid(){
+
+    }
+}

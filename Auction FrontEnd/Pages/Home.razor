@@ -1,0 +1,42 @@
+﻿@page "/"
+@layout HomePageLayout
+@inject NavigationManager _manager;
+<div class="landing col-9">
+    <div class="container">
+        <div class="nav">
+            <ul>
+                <li><NavLink href="/">Home</NavLink></li>
+                <li><NavLink href="/Contactus">Contact Us</NavLink></li>
+                <li><NavLink href="/LogIn">Log In</NavLink></li>
+                <li><NavLink href="/Register">Sign Up </NavLink></li>
+            </ul>
+        </div>
+        <div class=" content">
+            <p> Museum of Digital &&<br /> Fine and Decorative Art</p>
+            <button class="shop" @onclick="SHOP">SHOP NOW</button>
+        </div>
+    </div>
+    
+    <div class="gallery">
+        <div class="deco2">
+            <img src="\deco2.webp" alt="" />
+
+        </div>
+        <div class="deco3">
+            <img src="\deco3.jpg" alt=""/>
+        </div>
+        <div class="deco1">
+            <img src="\deco1.jpg" alt=""/>
+        </div>
+        <div class="dec">
+            <img src="/dec.jpg" alt=""/>
+        </div>
+    </div>
+</div>
+@code{
+    public void SHOP()
+    {
+
+        _manager.NavigateTo("/Login");
+    }
+}

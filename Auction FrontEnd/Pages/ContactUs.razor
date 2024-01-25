@@ -1,0 +1,56 @@
+﻿@page "/Contactus"
+
+<div class="container">
+    <h1>Contact Us</h1>
+    <div class="nav">
+   
+        <div class="links">
+        <ul>
+            <li><NavLink href="/">Home</NavLink></li>
+            <li><NavLink href="/LogIn">Log In</NavLink></li>
+            <li><NavLink href="/Register">Sign Up </NavLink></li>
+        </ul>
+        </div>
+    </div>
+    <div class="info">
+    <div class="talk">
+        <h1>Let's Talk</h1>
+        <p>Have some big idea or need help? <br />Then reach us out we'd love to hear<br /> your ideas.</p>
+            <div class="social">
+                <h1>Email</h1>
+                <p>lintonli@gmail.com</p>
+                <h1>Socials</h1>
+                <ul>
+                    <li> <a href="Instagram">Instagram</a></li>
+                    <li> <a href="Twitter">Twitter</a></li>
+                    <li> <a href="Facebook">Facebook</a></li>
+                </ul>
+            </div>
+        </div>
+       
+        <div class="form">
+            <label> Name</label>
+            <input type="text" id="UserName" name="username" @bind="username" />
+        
+
+            <label for="email">Your Email:</label>
+            <input type="email" id="email" name="email"@bind="email" required>
+
+            <label for="message">Your Message:</label>
+            <textarea id="message" name="message" rows="4"@bind="message" required></textarea>
+
+            <button type="submit" @onclick="SubmitForm">Submit</button>
+            </div>
+       
+    </div>
+</div>
+@code {
+    private string username;
+    private string email;
+    private string message;
+
+    public void SubmitForm()
+    {
+        Console.WriteLine($"Name:{username}, Email:{email}, Message:{message}");
+    }
+}

@@ -1,0 +1,53 @@
+﻿body {
+}
+.nav {
+    display: flex;
+    justify-content: space-between;
+    background-color: #D9D9D9;
+    border-radius: 5px;
+    align-items: baseline;
+}
+
+.logo {
+    margin: 10px;
+}
+
+.out img {
+    object-fit: cover;
+}
+
+.end {
+    display: flex;
+}
+
+.sidjjebar {
+    display: flex;
+    align-items: center;
+    background-color: #F39237;
+    justify-content: space-evenly;
+    color: black;
+    border-radius: 5px;
+}
+
+.icon img {
+    width: 20px;
+}
+.form {
+    display: grid;
+}
+
+    .form input {
+        width: 40%;
+        
+        gap: 10px;
+    }
+
+    .form button {
+        justify-content: center;
+        background-color: black;
+        color: white;
+        font-size: 1rem;
+        width: 50%;
+        border-radius: 10px;
+        margin-top: 15px;
+    }

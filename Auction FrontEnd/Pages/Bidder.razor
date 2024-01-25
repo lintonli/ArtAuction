@@ -1,0 +1,130 @@
+﻿@page "/Dashboard"
+@using System.Text
+@using System.Text.Json.Serialization
+@inject HttpClient http;
+@inject NavigationManager Navigation;
+@inject IJSRuntime _jsRuntime;
+<div class="container">
+    <div class="nav">
+        <div class="logo">
+
+            <p>Eddy'sEd</p>
+        </div>
+        <a href="/MyProducts">Sell</a>
+        <div class="end">
+            <div class="out">
+                <img src="/Icons/logout_FILL0_wght400_GRAD0_opsz24.svg" alt="" />
+
+            </div>
+            <a href="/">Logout</a>
+        </div>
+    </div>
+    <div class="body d-flex">
+       <div>
+            <div class="d-flex justify-content-between align-items-center">
+                <h1>Top Auctions</h1>
+                <span class="material-icons menu_toggle" @onclick=toogleMenu>menu</span>
+
+
+            </div>
+            <Navbar></Navbar>
+       </div>
+        <div class="display_arts">
+            <div class="top">
+                <img src="/Tp1.jpg" alt="" />
+            </div>
+            <div class="info">
+                <div class="info1">
+                    <p>Art of the lady of scotland</p>
+                    <div class="bid">
+                        <p>Highest Bid:@product.HighestBid</p>
+
+                    </div>
+                    <div class="bid1">
+                        <p>Start Price: @product.Price</p>
+
+                    </div>
+                    <button class="btn">View Item</button>
+                </div>
+                <div class="info2">
+                    <p>@GetTimeRemaining(product.EndTime)</p><br />
+                    <h2>@GetBiddingStatus(product.EndTime)</h2>
+                    <button class="now" @onclick="(_) => Bid(product.Id)">Bid Now</button>
+
+                </div>
+            </div>
+            <div class="search">
+                <input type="text" id="search" />
+                <img src="/Icons/manage_search_FILL0_wght400_GRAD0_opsz24.svg" />
+            </div>
+
+            <div class="items">
+                @foreach (var prods in products)
+                {
+                    <div class="item1">
+                        <div class="info3">
+                            <img src="@prods.Image" alt="" />
+                            <h1>@prods.Name</h1>
+                            <div class="stat">
+                                <h3>Highest bid: @prods.HighestBid</h3>
+                                <p>@prods.BiddingState</p>
+                            </div>
+                            <div class="stat2">
+                                <h3>Start bid: @prods.Price</h3>
+                                <button class="btn" @onclick="(e => ViewItem(prods.Id))">View Item</button>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                }
+            </div>
+        </div>
+            
+           
+    </div>
+</div>
+@code{
+    public List<Product> products { get; set; } = new List<Product>();
+    public Product product { get; set; } = new Product();
+
+    [Parameter]
+    public EventCallback OnShowMenu { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        var prod = await http.GetFromJsonAsync<List<Product>>("Sample-data/Product.json");
+
+        if (prod.Any())
+        {
+            products = prod;
+        }
+    }
+
+    public void Bid(Guid Id){
+        Navigation.NavigateTo($"/ViewItem/{Id}");
+
+    }
+    public void ViewItem(Guid Id){
+        Navigation.NavigateTo($"/ViewItem/{Id}");
+    }
+    private string GetTimeRemaining(DateTime date){
+        var timeremaining = date - DateTime.Now;
+        return $"{timeremaining.Days:D2}D:{timeremaining.Hours:D2}H:{timeremaining.Minutes:D2}M:{timeremaining.Seconds:D2}S";
+    }
+    private string GetBiddingStatus(DateTime date){
+        var timing = date - DateTime.Now;
+        return timing > TimeSpan.Zero ? "Bid Open" : "Bidding Closed";
+    }
+
+    public void toogleMenu()
+    {
+        _jsRuntime.InvokeVoidAsync("toogle_menu");
+    }
+
+
+    
+    
+
+}

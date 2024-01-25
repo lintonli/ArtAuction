@@ -1,0 +1,33 @@
+﻿@inject IJSRuntime _jsRuntime;
+
+
+<div class="sidjjebar" id="side_bar">
+    <span class="material-icons cancel_pop" @onclick="ToogleMenu">cancel</span>
+    <div class="icon">
+        <img src="/Icons/team_dashboard_FILL0_wght400_GRAD0_opsz24.svg" alt="" />
+
+        <a href="/Dashboard">Dashboard</a>
+
+    </div>
+    <div class="icon">
+        <img src="/Icons/gavel_FILL0_wght400_GRAD0_opsz24.svg" alt="" />
+        <a href="/Biddings">My Biddings</a>
+    </div>
+    <div class="icon">
+        <img src="/Icons/orders_FILL0_wght400_GRAD0_opsz24.svg" alt="" />
+        <a href="/Checkout">Orders</a>
+    </div>
+    <div class="icon">
+        <img src="/Icons/manage_accounts_FILL0_wght400_GRAD0_opsz24.svg" alt="" />
+        <a href="/account">Account</a>
+    </div>
+</div>
+@code {
+
+    public void ToogleMenu()
+    {
+        _jsRuntime.InvokeVoidAsync("toogle_menu");
+
+    }
+
+}

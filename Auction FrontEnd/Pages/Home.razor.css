@@ -1,0 +1,88 @@
+﻿/*body {
+    width:auto;
+}*/
+.landing{
+    gap:10px;
+    display:grid;
+    justify-content:center;
+    width: 100%;
+}
+.container{
+    position: relative;
+    margin: 0 auto;
+    width: 80vw;
+    height: 300px;
+    background-image:url('\Home.jpg');
+    background-size: cover;
+    background-position:center center;
+    /*width:100%;*/
+    
+}
+.nav{
+    display: flex;
+    flex-direction:row;
+    justify-content: flex-end;
+}
+    .nav ul {
+        display: flex;
+        margin-left: 15px;
+        color: white;
+        font-family: 'Sans Serif Collection';
+        gap: 15px;
+    }
+.nav ul li hover{
+    color:aqua;
+}
+.content {
+    display: flex;
+    justify-content:space-between;
+    position:absolute;
+    bottom: 2rem;
+    left: 5rem;
+    right: 5rem;
+}
+.content p{
+    color: wheat;
+    font-size: 1rem;
+}
+.shop{
+    float:right;
+    background-color:black;
+    color: white;
+    border-radius:40px;
+    margin-bottom:20px;
+}
+.gallery{
+    width: 80vw;
+    margin: 0 auto;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:10px;
+    margin:15px;
+}
+.gallery img {
+    height: 100%;
+}
+@media(min-width: 600px) {
+    .gallery { 
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows:repeat(2, 300px);
+        grid-template-areas:
+            "one one two three"
+            "four four four three";
+    }
+    .deco2{
+        grid-area:one;
+
+    }
+    .deco3{
+        grid-area:two;
+    }
+    .deco1{
+        grid-area:three;
+    }
+    .dec{
+        grid-area:four;
+    }
+}

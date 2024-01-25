@@ -1,0 +1,32 @@
+[
+  {
+    "Id": "01234567-89ab-cdef-0123-456789abcdef",
+    "Image": "https://images.artnet.com/aoa_lot_images/141045/edward-burtynsky-%C3%B6lfus%C3%A1-river-1-iceland-photographs-zoom_223_167.jpeg",
+    "Name": "Roman Empire",
+    "Price": 100,
+    "HighestBid": 555,
+    "StartTime": "2024-01-19T11:00:00",
+    "EndTime": "2024-01-20T11:00:00",
+    "BiddingState": "Active",
+    "SellerName": "John Doe",
+    "IsWon": true,
+    "IsWinner": true
+  },
+  {
+    "Id": "12345678-9abc-def0-1234-56789abcdef0",
+    "Image": "https://images.artnet.com/aoa_lot_images/141061/marc-brandenburg-untitled-works-on-paper-zoom_223_223.jpg",
+    "Name": "Monalissa",
+    "Price": 29,
+    "HighestBid": 35,
+    "StartTime": "2024-02-01T09:00:00",
+    "EndTime": "2024-02-07T15:30:00",
+    "BiddingState": "Closed",
+    "SellerName": "Jane Smith",
+    "IsWinner": true,
+    "IsWon": true
+  }
+  
+]
+
+
+

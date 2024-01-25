@@ -1,0 +1,46 @@
+﻿body {
+}
+.nav {
+    display: flex;
+    justify-content: space-between;
+    background-color: #D9D9D9;
+    border-radius: 5px;
+    align-items: baseline;
+}
+
+.logo {
+    margin: 10px;
+}
+
+.out img {
+    object-fit: cover;
+}
+
+.end {
+    display: flex;
+}
+
+.sidjjebar {
+    display: flex;
+    align-items: center;
+    background-color: #F39237;
+    justify-content: space-evenly;
+    color: black;
+    border-radius: 5px;
+}
+
+.icon img {
+    width: 20px;
+}
+
+.btn {
+    background-color: darkgreen;
+    color: white;
+    font-family: 'Irish Grover', system-ui;
+    border-radius:5px;
+}
+@media(min-width:600px ){
+    .item img {
+        width: 50%;
+    }
+}
