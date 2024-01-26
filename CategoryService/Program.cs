@@ -1,8 +1,8 @@
+using Categoryservice.Data;
+using Categoryservice.Extension;
+using Categoryservice.Service;
+using Categoryservice.Service.IService;
 using Microsoft.EntityFrameworkCore;
-using PRODUCTSERVICE.Data;
-using PRODUCTSERVICE.Extensions;
-using PRODUCTSERVICE.Services;
-using PRODUCTSERVICE.Services.IServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,16 +15,15 @@ builder.Services.AddSwaggerGen();
 
 builder.AddAuth();
 builder.AddSwaggenGenExtension();
-builder.Services.AddScoped<IProducts, ProductService>();
-builder.Services.AddScoped<ICategory, CartService>();   
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddHttpClient("Category", c => c.BaseAddress = new Uri(builder.Configuration.GetValue<string>("ServiceURl:CartService")));
-
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("myconnection"));
 });
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddScoped<ICategory, CartService>();  
 
 var app = builder.Build();
 

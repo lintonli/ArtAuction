@@ -7,6 +7,8 @@
        
         public string Description { get; set; } = string.Empty;
         public int Price { get; set; }
+     
+        public int HighestBid { get; set; }
         public DateTime EndTime { get; set; }
     }
 }

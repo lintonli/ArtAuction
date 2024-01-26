@@ -1,8 +1,7 @@
-﻿namespace PRODUCTSERVICE.Models
+﻿namespace BidService.Models.Dtos
 {
-    public class Product
+    public class ProductDto
     {
-    
         public Guid Id { get; set; }
         public string Image { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
@@ -12,9 +11,8 @@
         public Guid CategoryId { get; set; }
         public int HighestBid { get; set; }
         public string BiddingState { get; set; } = "Active";
-        public DateTime StartTime { get; set; }=DateTime.Now;
+        public DateTime StartTime { get; set; } = DateTime.Now;
         public DateTime EndTime { get; set; }
 
-      
     }
 }

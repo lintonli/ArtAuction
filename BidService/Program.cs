@@ -1,8 +1,8 @@
+using BidService.Data;
+using BidService.Extensions;
+using BidService.Services;
+using BidService.Services.IServices;
 using Microsoft.EntityFrameworkCore;
-using PRODUCTSERVICE.Data;
-using PRODUCTSERVICE.Extensions;
-using PRODUCTSERVICE.Services;
-using PRODUCTSERVICE.Services.IServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,19 +12,20 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 builder.AddAuth();
 builder.AddSwaggenGenExtension();
-builder.Services.AddScoped<IProducts, ProductService>();
-builder.Services.AddScoped<ICategory, CartService>();   
+
+builder.Services.AddScoped<IBid, BidsServices>();
+builder.Services.AddScoped<IProduct, ProductServices>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddHttpClient("Category", c => c.BaseAddress = new Uri(builder.Configuration.GetValue<string>("ServiceURl:CartService")));
 
 
+builder.Services.AddHttpClient("Products", c => c.BaseAddress = new Uri(builder.Configuration.GetValue<string>("ServiceURl:ProductService")));
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("myconnection"));
 });
+
 
 var app = builder.Build();
 

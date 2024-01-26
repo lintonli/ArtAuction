@@ -1,4 +1,4 @@
-﻿namespace PRODUCTSERVICE.Models.Dtos
+﻿namespace BidService.Models.Dtos
 {
     public class UserDto
     {

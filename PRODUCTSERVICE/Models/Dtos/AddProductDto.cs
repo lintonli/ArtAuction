@@ -13,6 +13,7 @@ namespace PRODUCTSERVICE.Models.Dtos
         
         [Required]
         public int Price { get; set; }
+        public Guid CategoryId { get; set; }
         public DateTime EndTime { get; set; }
     }
 }
