@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using PRODUCTSERVICE.Data;
+using ORDERSERVICE.Data;
 
 #nullable disable
 
-namespace PRODUCTSERVICE.Migrations
+namespace ORDERSERVICE.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240124083629_Auctionprods")]
-    partial class Auctionprods
+    [Migration("20240130091141_updatedOrders")]
+    partial class updatedOrders
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,47 +25,32 @@ namespace PRODUCTSERVICE.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("PRODUCTSERVICE.Models.Product", b =>
+            modelBuilder.Entity("ORDERSERVICE.Models.Order", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("BiddingState")
+                    b.Property<Guid>("BidId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PaymentIntent")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("HighestBid")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Image")
-                        .IsRequired()
+                    b.Property<string>("StripeSessionId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Price")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SellerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("Orders");
                 });
 #pragma warning restore 612, 618
         }

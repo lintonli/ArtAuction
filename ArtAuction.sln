@@ -3,19 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34316.72
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auction FrontEnd", "Auction FrontEnd\Auction FrontEnd.csproj", "{D4973790-DA2D-4521-AC74-F5BC478BC241}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auction FrontEnd", "Auction FrontEnd\Auction FrontEnd.csproj", "{D4973790-DA2D-4521-AC74-F5BC478BC241}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuctionMessageBus", "AuctionMessageBus\AuctionMessageBus.csproj", "{46313F43-2E0C-44A5-9B89-7690D605FF04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuctionMessageBus", "AuctionMessageBus\AuctionMessageBus.csproj", "{46313F43-2E0C-44A5-9B89-7690D605FF04}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailService", "EmailService\EmailService.csproj", "{6A81685A-F00D-410D-8D8D-A6ACCC427516}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmailService", "EmailService\EmailService.csproj", "{6A81685A-F00D-410D-8D8D-A6ACCC427516}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AUTHSERVICE", "AUTHSERVICE\AUTHSERVICE.csproj", "{AD76AF08-8C64-4C0C-A945-E3A64F4C0BBD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AUTHSERVICE", "AUTHSERVICE\AUTHSERVICE.csproj", "{AD76AF08-8C64-4C0C-A945-E3A64F4C0BBD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PRODUCTSERVICE", "PRODUCTSERVICE\PRODUCTSERVICE.csproj", "{0571C032-3854-437C-B597-19FA981B3759}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PRODUCTSERVICE", "PRODUCTSERVICE\PRODUCTSERVICE.csproj", "{0571C032-3854-437C-B597-19FA981B3759}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BidService", "BidService\BidService.csproj", "{EA554314-8D26-4F69-BFAC-858AAD150DF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BidService", "BidService\BidService.csproj", "{EA554314-8D26-4F69-BFAC-858AAD150DF9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CategoryService", "CategoryService\CategoryService.csproj", "{A1F3C662-9CF0-4E54-9F82-FF048BC7141D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CategoryService", "CategoryService\CategoryService.csproj", "{A1F3C662-9CF0-4E54-9F82-FF048BC7141D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ORDERSERVICE", "ORDERSERVICE\ORDERSERVICE.csproj", "{978324B2-F0D7-47A1-BBDE-78D4F69112F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{A1F3C662-9CF0-4E54-9F82-FF048BC7141D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1F3C662-9CF0-4E54-9F82-FF048BC7141D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1F3C662-9CF0-4E54-9F82-FF048BC7141D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{978324B2-F0D7-47A1-BBDE-78D4F69112F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{978324B2-F0D7-47A1-BBDE-78D4F69112F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{978324B2-F0D7-47A1-BBDE-78D4F69112F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{978324B2-F0D7-47A1-BBDE-78D4F69112F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

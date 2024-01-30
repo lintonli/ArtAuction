@@ -15,15 +15,17 @@ namespace PRODUCTSERVICE.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProducts _productServices;
+        private readonly IBid _bidServices;
         private readonly ICategory _cartService;
         private readonly IMapper _mapper;
         private readonly ResponseDto _responseDto;
-        public ProductController(IProducts productServices, IMapper mapper, ICategory cartService)
+        public ProductController(IProducts productServices, IMapper mapper, ICategory cartService, IBid bidServices)
         {
             _mapper = mapper;
             _productServices = productServices;
             _responseDto = new ResponseDto();
             _cartService = cartService;
+            _bidServices = bidServices;
         }
         [HttpPost]
         [Authorize]
@@ -43,6 +45,7 @@ namespace PRODUCTSERVICE.Controllers
                 return NotFound(_responseDto);
             }
             var prod = _mapper.Map<Product>(productDto);
+            prod.HighestBid = prod.Price;
             prod.SellerId = Guid.Parse(UserId);
 
 
@@ -54,7 +57,16 @@ namespace PRODUCTSERVICE.Controllers
         public async Task<ActionResult<ResponseDto>> GetAllProducts()
         {
             var res = await _productServices.GetProducts();
-            _responseDto.Result = res;
+            var products= _mapper.Map<List<ProductDto>>(res);
+
+            var bids = await _bidServices.GetAllBids(); 
+            foreach(var prod in products)
+            {
+                var productbids = bids.FindAll(bid => bid.ProductId == prod.Id);
+                prod.BidCount = productbids.Count();
+
+            }
+            _responseDto.Result = products;
             return Ok(_responseDto);
         }
         [HttpGet("{Id}")]
@@ -65,6 +77,12 @@ namespace PRODUCTSERVICE.Controllers
             {
                 return NotFound(_responseDto);
             }
+            var bidproducts= _mapper.Map<ProductDto>(prod);
+
+            var bid = await _bidServices.GetAllBids();
+            var productBids = bid.FindAll(bid => bid.ProductId == prod.Id);
+            bidproducts.BidCount = productBids.Count;
+
             _responseDto.Result = prod;
             return Ok(_responseDto);
         }
@@ -96,7 +114,7 @@ namespace PRODUCTSERVICE.Controllers
             return Ok(_responseDto) ;
         }
 
-        [HttpPut("{Id}/UpdateHighestBid")]
+        [HttpPut("UpdateHighestBid/{Id}")]
         public async Task<ActionResult<bool>> UpdateHighestBid(Guid Id, HighestBidDto newBid)
         {
             var res = await _productServices.GetProductById(Id);
@@ -105,11 +123,38 @@ namespace PRODUCTSERVICE.Controllers
                 _responseDto.Errormessage = "Product not found";
                 return NotFound(_responseDto);
             }
-            var bid = await _productServices.UpdateHighestBid(Id, newBid.HighestBid);
+            res.HighestBid = newBid.HighestBid;
+            var Updatebid = await _productServices.UpdateProduct(res);
+            if(Updatebid != null)
+            {
+                _responseDto.IsSuccess= true;
+                return Ok(_responseDto) ;
+            }
+            return BadRequest(_responseDto);
+
+           /* var bid = await _productServices.UpdateHighestBid(Id, newBid.HighestBid);
             _responseDto.IsSuccess = true;
-            return Ok(_responseDto) ;
+            return Ok(_responseDto) ;*/
 
           
         }
+       /*[HttpGet("bidcount{Id}")]
+        public async Task<ActionResult<bool>> BidCount(Guid Id, ProductDto dto)
+        {
+            var product = await _productServices.GetProductById(Id);
+            if (product == null)
+            {
+                _responseDto.Errormessage = "Product Not Found";
+                return NotFound(_responseDto);
+            }
+            product.BidCount=dto.BidCount;
+            var updatecount = await _productServices.UpdateProduct(product);
+            if (updatecount != null)
+            {
+                _responseDto.IsSuccess= true;
+                return Ok(_responseDto) ;
+            }
+            return BadRequest(_responseDto);
+        }*/
     }
 }

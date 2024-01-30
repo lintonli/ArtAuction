@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PRODUCTSERVICE.Migrations
 {
     /// <inheritdoc />
-    public partial class Auctionprods : Migration
+    public partial class art : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,9 +18,10 @@ namespace PRODUCTSERVICE.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SellerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SellerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<int>(type: "int", nullable: false),
+                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     HighestBid = table.Column<int>(type: "int", nullable: false),
                     BiddingState = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),

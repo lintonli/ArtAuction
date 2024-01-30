@@ -2,10 +2,12 @@
 {
     public class BidDto
     {
-        public decimal BidPrice { get; set; }
+        public int BidPrice { get; set; }
 
 
         public Guid ProductId { get; set; }
+
+        /*public ProductDto Product { get; set; }*/
       /*  public Guid UserId { get; set; }*/
     }
 }

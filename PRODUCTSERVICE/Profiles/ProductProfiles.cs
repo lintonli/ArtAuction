@@ -10,6 +10,7 @@ namespace PRODUCTSERVICE.Profiles
         {
             CreateMap<AddProductDto, Product>().ReverseMap();
             CreateMap<UpdateProduct, Product>().ReverseMap();
+            CreateMap<ProductDto, Product>().ReverseMap();  
         }
     }
 }

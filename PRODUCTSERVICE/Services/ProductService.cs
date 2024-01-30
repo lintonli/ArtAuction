@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PRODUCTSERVICE.Data;
 using PRODUCTSERVICE.Models;
+using PRODUCTSERVICE.Models.Dtos;
 using PRODUCTSERVICE.Services.IServices;
 
 namespace PRODUCTSERVICE.Services
@@ -33,7 +34,8 @@ namespace PRODUCTSERVICE.Services
 
         public async Task<Product> GetProductById(Guid Id)
         {
-            return await _context.Products.Where(x => x. Id == Id).FirstOrDefaultAsync();
+            return await _context.Products.Where(x => x.Id == Id).FirstOrDefaultAsync();
+
         }
 
         public async Task<List<Product>> GetProducts()
@@ -42,17 +44,19 @@ namespace PRODUCTSERVICE.Services
             return prod;
         }
 
+    
+
         public async Task<bool> UpdateHighestBid(Guid Id, int newbid)
         {
            var prod = await _context.Products.Where(x => x .Id == Id).FirstOrDefaultAsync();
-            if(prod == null || prod.EndTime < DateTime.UtcNow)
+            /*if(prod == null || prod.EndTime < DateTime.UtcNow)
             {
                 return false;
-            }
-            if (newbid <= prod.HighestBid)
+            }*/
+           /* if (newbid <= prod.HighestBid)
             {
                 return false;
-            }
+            }*/
             prod.HighestBid=newbid;
             await _context.SaveChangesAsync();
             return true;

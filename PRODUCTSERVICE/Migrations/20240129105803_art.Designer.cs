@@ -12,8 +12,8 @@ using PRODUCTSERVICE.Data;
 namespace PRODUCTSERVICE.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240126082021_updatedcategory")]
-    partial class updatedcategory
+    [Migration("20240129105803_art")]
+    partial class art
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

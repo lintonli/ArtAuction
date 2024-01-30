@@ -1,4 +1,4 @@
-﻿namespace BidService.Models.Dtos
+﻿namespace PRODUCTSERVICE.Models.Dtos
 {
     public class ProductDto
     {
@@ -13,9 +13,6 @@
         public string BiddingState { get; set; } = "Active";
         public DateTime StartTime { get; set; } = DateTime.Now;
         public DateTime EndTime { get; set; }
-        public int BidCount { get; set; }
-
-        public List<BidResponseDto> Bidresponse { get; set; }
-
+        public int BidCount {  get; set; }
     }
 }

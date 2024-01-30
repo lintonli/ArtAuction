@@ -21,6 +21,7 @@ namespace BidService.Services
 
         public async Task<string> AddBid(Bid bid)
         {
+            
             _context.Bids.Add(bid);
             await _context.SaveChangesAsync();
             return "Bid Added successfully";
