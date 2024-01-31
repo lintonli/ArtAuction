@@ -3,6 +3,7 @@ using PRODUCTSERVICE.Data;
 using PRODUCTSERVICE.Extensions;
 using PRODUCTSERVICE.Services;
 using PRODUCTSERVICE.Services.IServices;
+using PRODUCTSERVICE.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,7 @@ builder.Services.AddScoped<IBid, BidService>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddHttpClient("Category", c => c.BaseAddress = new Uri(builder.Configuration.GetValue<string>("ServiceURl:CartService")));
 builder.Services.AddHttpClient("Bid", c => c.BaseAddress = new Uri(builder.Configuration.GetValue<string>("ServiceURl:BidService")));
+builder.Services.AddHostedService<TimeBackgroundService>();
 
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

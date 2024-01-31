@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Validations;
 using PRODUCTSERVICE.Data;
 using PRODUCTSERVICE.Models;
 using PRODUCTSERVICE.Models.Dtos;
@@ -66,6 +67,20 @@ namespace PRODUCTSERVICE.Services
         {
             await _context.SaveChangesAsync();
             return "Product Updated";
+        }
+
+        public async Task UpdateStatus()
+        {
+            var prodStatus = await _context.Products.ToListAsync();
+            foreach(var item in prodStatus)
+            {
+                if(item.EndTime<= DateTime.Now)
+                {
+                    item.BiddingState = "Closed";
+                } 
+               
+            }
+            await _context.SaveChangesAsync();
         }
     }
 }

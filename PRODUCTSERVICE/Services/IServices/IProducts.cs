@@ -11,6 +11,7 @@ namespace PRODUCTSERVICE.Services.IServices
         Task<string> DeleteProduct(Product product);
         Task<string> UpdateProduct(Product product);
         Task<bool> UpdateHighestBid(Guid Id, int newbid);
+        Task UpdateStatus();
  
     }
 }
