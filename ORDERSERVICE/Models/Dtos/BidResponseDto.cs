@@ -2,6 +2,7 @@
 {
     public class BidResponseDto
     {
+        public Guid Id { get; set; }
         public int BidPrice { get; set; }
 
 

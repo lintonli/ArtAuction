@@ -44,11 +44,11 @@ namespace ORDERSERVICE.Controllers
             order.UserId = Guid.Parse(UserId);
             
             var bidOrder = await _orderService.GetOrderbyBidId(dto.BidId);
-            if(bidOrder.BidId!=Guid.Empty)
+           /* if(bidOrder.BidId==bid.Id)
             {
                 _responseDto.Errormessage = "BidId already Exists";
                 return BadRequest(_responseDto);
-            }
+            }*/
 
 
 
@@ -99,6 +99,22 @@ namespace ORDERSERVICE.Controllers
             var striperequest = await _orderService.MakePayments(stripeRequest);
             _responseDto.Result = striperequest;
             return Ok(_responseDto);
+        }
+        [HttpPost("validate/{Id}")]
+
+        public async Task<ActionResult<ResponseDto>> validatePayment(Guid Id)
+        {
+            /*     var token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];*/
+            var res = await _orderService.ValidatePayments(Id);
+
+            if (res)
+            {
+                _responseDto.Result = res;
+                return Ok(_responseDto);
+            }
+
+            _responseDto.Errormessage = "Payment Failed!";
+            return BadRequest(_responseDto);
         }
 
     }

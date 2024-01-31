@@ -28,6 +28,7 @@ builder.Services.AddScoped<IUser, UserService>();
 builder.Services.AddScoped<IMessageBus, MessageBus>();
 
 builder.Services.AddHttpClient("Bid", c => c.BaseAddress = new Uri(builder.Configuration.GetValue<string>("ServiceURl:BidService")));
+builder.Services.AddHttpClient("User", c => c.BaseAddress = new Uri(builder.Configuration.GetValue<string>("ServiceURl:UserServiceURL")));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 Stripe.StripeConfiguration.ApiKey = builder.Configuration.GetValue<string>("Stripe:Key");
 var app = builder.Build();

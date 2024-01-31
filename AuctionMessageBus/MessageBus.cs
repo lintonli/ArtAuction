@@ -10,7 +10,7 @@ namespace AuctionMessageBus
 {
     public class MessageBus : IMessageBus
     {
-        private readonly string connectionString = "Endpoint=sb://ecommbus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=pJYc4uhjldMPmeiMrlkWhQcJ3svQCMrjs+ASbB4y6AA=";
+        private readonly string connectionString = "Endpoint=sb://lintauctionservicebus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=qc5X/e62DmAVdWXfPhuVdUyMUMdCDL/DA+ASbCKLScw=";
         public async Task PublishMessage(object message, string Topic_queue_Name)
         {
             var client = new ServiceBusClient(connectionString);

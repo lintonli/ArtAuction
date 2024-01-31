@@ -1,4 +1,5 @@
 ﻿using AuctionMessageBus;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using ORDERSERVICE.Data;
 using ORDERSERVICE.Models;
@@ -16,6 +17,7 @@ namespace ORDERSERVICE.Service
         private readonly IBid _bidService;
         private readonly IUser _userService;
         private readonly IMessageBus _messageBus;
+        private readonly ResponseDto responseDto;
 
         public OrderService(ApplicationDbContext context, IBid bid, IUser user, IMessageBus messageBus, IConfiguration configuration)
         {
@@ -24,6 +26,7 @@ namespace ORDERSERVICE.Service
             _userService = user;
             _messageBus= messageBus;
             _configuration = configuration;
+            responseDto= new ResponseDto();
         }
         public async Task<string> AddOrder(Order order)
         {
@@ -44,10 +47,11 @@ namespace ORDERSERVICE.Service
             var bidorder = await _context.Orders.Where(x => x.BidId == bidId).FirstOrDefaultAsync();
             if (bidorder != null)
             {
-                return bidorder;
+                responseDto.Errormessage = "Bid id exists";
 
             }
-            return null;
+            return bidorder;
+
         }
 
         public async Task<Order> GetOrderById(Guid Id)
