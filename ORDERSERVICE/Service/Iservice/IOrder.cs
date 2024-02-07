@@ -10,8 +10,8 @@ namespace ORDERSERVICE.Service.Iservice
         Task<string> AddOrder(Order order);
         Task<string> DeleteOrder(Order ord);
         Task<Order>GetOrderbyBidId(Guid bidId);
-        Task<StripeRequestDto>MakePayments(StripeRequestDto stripeRequestDto);
-        Task<bool> ValidatePayments(Guid OrderId);
+        Task<StripeRequestDto>MakePayments(StripeRequestDto stripeRequestDto, string token );
+        Task<bool> ValidatePayments(Guid OrderId, string token);
         Task saveChanges();
     }
 }

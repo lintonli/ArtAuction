@@ -2,6 +2,7 @@
 using Categoryservice.Models;
 using Categoryservice.Models.Dtos;
 using Categoryservice.Service.IService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -23,6 +24,7 @@ namespace Categoryservice.Controllers
             
         }
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<ResponseDto>> GetAll()
         {
             var art= await _categoryServices.GetAll();
@@ -30,6 +32,7 @@ namespace Categoryservice.Controllers
             return Ok(_responseDto);
         }
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<ResponseDto>>AddCategory(CategoryDto category)
         {
             var art = _mapper.Map<Category>(category);
@@ -39,6 +42,7 @@ namespace Categoryservice.Controllers
            
         }
         [HttpGet("{Id}")]
+        [Authorize]
         public async Task<ActionResult<ResponseDto>>GetCategory(Guid Id)
         {
             var art = await _categoryServices.GetCategoryById(Id);
@@ -50,6 +54,7 @@ namespace Categoryservice.Controllers
             return Ok(_responseDto);
         }
         [HttpDelete("{Id}")]
+        [Authorize]
         public async Task<string> DeleteCategory(Guid Id)
         {
             var art = await _categoryServices.GetCategoryById(Id);
@@ -61,6 +66,7 @@ namespace Categoryservice.Controllers
             return "Category deleted successfully";
          }
         [HttpPut("{Id}")]
+        [Authorize]
         public async Task<ActionResult<ResponseDto>>UpdateCategory(Guid Id, CategoryDto categoryDto)
         {
             var art = await _categoryServices.GetCategoryById(Id);

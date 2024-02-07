@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Categoryservice.Migrations
+namespace CategoryService.Migrations
 {
     /// <inheritdoc />
-    public partial class categories : Migration
+    public partial class category : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

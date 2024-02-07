@@ -46,9 +46,14 @@ namespace BidService.Services
             return await _context.Bids.Where(x => x.Id == Id).FirstOrDefaultAsync();
         }
 
-      /*  public async Task<List<Bid>> GetBidByUserId(Guid userId)
+        public async Task<List<Bid>> GetBidByUserId(Guid userId)
         {
-            return await _context.Bids.Where(x =>x.UserId == userId).ToListAsync();
-        }*/
+            return await _context.Bids.Where(x =>x .UserId == userId).GroupBy(x =>x.ProductId).Select(x=>x.OrderByDescending(x=>x.BidPrice).First()).ToListAsync();
+        }
+
+        /*  public async Task<List<Bid>> GetBidByUserId(Guid userId)
+          {
+              return await _context.Bids.Where(x =>x.UserId == userId).ToListAsync();
+          }*/
     }
 }

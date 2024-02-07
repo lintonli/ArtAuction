@@ -1,6 +1,11 @@
 ﻿@page "/MyProducts"
+@using Microsoft.AspNetCore.Authorization
 @inject HttpClient http;
 @inject NavigationManager navigtion;
+@inject ProductService productService
+@inject TokenProvider tokenProvider;
+@attribute [Authorize]
+
 <div class="container">
     <div class="nav">
         <div class="logo">
@@ -13,15 +18,16 @@
                 <img src="/Icons/logout_FILL0_wght400_GRAD0_opsz24.svg" alt="" />
 
             </div>
-            <a href="/">Logout</a>
+            <div @onclick=Logout>Logout</div>
         </div>
     </div>
    
         <div class="sidjjebar">
-
+      
         <div class="icon">
             <img src="/Icons/gavel_FILL0_wght400_GRAD0_opsz24.svg" alt="" />
             <a href="/MyProducts">My Products</a>
+          
         </div>
         <div class="icon">
             <img src="/Icons/orders_FILL0_wght400_GRAD0_opsz24.svg" alt="" />
@@ -44,11 +50,12 @@
                         <h1>@prods.Name</h1>
                         <div class="stat">
                             <h3>Highest bid: @prods.HighestBid</h3>
-                            <p>@prods.BiddingState</p>
+                            <p>Status: @prods.BiddingState</p>
+                            <p>Bid: @prods.BidCount</p>
                         </div>
                             <div class="cmd">
                             <button class="btn" @onclick="(e => Delete(prods.Id))">Delete</button>
-                                <button class="edit" @onclick="(e => Edit(prods.Id))">Edit</button>
+                                <button class="edit" @onclick="(e => Edit(prods.Id, new ProductDto {Name=prods.Name,Image=prods.Image,Description=prods.Description}))">Edit</button>
                             </div>
                        
 
@@ -63,26 +70,31 @@
 @code {
     public List<Product> product { get; set; } = new List<Product>();
 
-   
+
 
     protected override async Task OnInitializedAsync()
     {
 
-        var Product = await http.GetFromJsonAsync<List<Product>>("sample-data/Product.json");
-
-        if (Product.Any())
-        {
-            product = Product;
-        }
+        product = await productService.GetProductbyUserId();
     }
 
-    private void Delete(Guid Id)
+    private async void Delete(Guid Id)
+    {
+        await productService.deleteProduct(Id);
+    }
+    private async void Edit(Guid Id, ProductDto newProduct)
     {
 
+        await productService.updateProduct(Id,newProduct);
+        navigtion.NavigateTo("/AddProduct");
     }
-    private void Edit(Guid Id)
+
+    public async Task Logout()
     {
-        
+
+        await tokenProvider.RemoveItemAsync();
+        navigtion.NavigateTo("/");
+
     }
 
 }

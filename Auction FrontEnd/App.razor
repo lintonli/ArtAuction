@@ -1,7 +1,24 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@inject NavigationManager navigationManager
+<CascadingAuthenticationState>
+
+<Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" >
+                <Authorizing>
+                    <p>Authorizing User</p>
+                </Authorizing>
+                <NotAuthorized>
+                    <p>You are not Authorized to Access this page</p>
+                    @{
+                        navigationManager.NavigateTo("/LogIn");
+                    }
+                </NotAuthorized>
+               
+        @* <FocusOnNavigate RouteData="@routeData" Selector="h1" /> *@
+        </AuthorizeRouteView>
+            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+
     </Found>
     <NotFound>
         <PageTitle>Not found</PageTitle>
@@ -10,3 +27,5 @@
         </LayoutView>
     </NotFound>
 </Router>
+
+</CascadingAuthenticationState>

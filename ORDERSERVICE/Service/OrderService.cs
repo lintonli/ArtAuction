@@ -64,10 +64,11 @@ namespace ORDERSERVICE.Service
             return order;
         }
 
-        public  async Task<StripeRequestDto> MakePayments(StripeRequestDto stripeRequestDto)
+        public  async Task<StripeRequestDto> MakePayments(StripeRequestDto stripeRequestDto, string token)
         {
+          
             var order = await _context.Orders.Where(x => x.Id == stripeRequestDto.OrderId).FirstOrDefaultAsync();
-            var bid = await _bidService.GetBidById(order.BidId);
+            var bid = await _bidService.GetBidById(order.BidId, token);
 
             var options = new SessionCreateOptions()
             {
@@ -111,9 +112,9 @@ namespace ORDERSERVICE.Service
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> ValidatePayments(Guid OrderId)
+        public async Task<bool> ValidatePayments(Guid OrderId, string token)
         {
-
+           
             var order = await _context.Orders.Where(x => x.Id == OrderId).FirstOrDefaultAsync();
 
             var service = new SessionService();
@@ -137,7 +138,7 @@ namespace ORDERSERVICE.Service
                 {
                     return false;
                 }
-                var bid = await _bidService.GetBidById(order.BidId);
+                var bid = await _bidService.GetBidById(order.BidId,token);
                 UserMessageDto userMessage = new UserMessageDto()
                 {
                     Name=user.Name,

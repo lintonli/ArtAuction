@@ -1,6 +1,10 @@
 ﻿@page "/Admin"
+@using Microsoft.AspNetCore.Authorization
 @inject HttpClient http;
 @inject NavigationManager navigation;
+@inject AuthService authentication;
+@inject TokenProvider tokenProvider;
+@attribute [Authorize(Roles = "Admin")]
 
 <div class="container">
     <div class="nav">
@@ -14,7 +18,7 @@
                 <img src="/Icons/logout_FILL0_wght400_GRAD0_opsz24.svg" alt="" />
 
             </div>
-            <a href="/">Logout</a>
+            <div @onclick=Logout>Logout</div>
         </div>
     </div>
 
@@ -66,14 +70,16 @@
 
 
 @code {
-    
+
 
     public User user{ get; set; }
     private List<User> users = new List<User>();
 
     protected override async Task OnInitializedAsync()
     {
-        users = await http.GetFromJsonAsync<List<User>>("sample-data/User.json");
+        // users = await http.GetFromJsonAsync<List<User>>("sample-data/User.json");
+        users = await authentication.GetUsers();
+
     }
 
     private void DeleteUser(Guid Id)
@@ -87,6 +93,13 @@
         navigation.NavigateTo($"/message/{Email}");
         // Logic to send mail
         // In a real application, this would involve a backend service or mail API
+    }
+    public async Task Logout()
+    {
+
+        await tokenProvider.RemoveItemAsync();
+        navigation.NavigateTo("/");
+
     }
 
 }

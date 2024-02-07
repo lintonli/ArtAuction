@@ -28,13 +28,14 @@ namespace ORDERSERVICE.Controllers
         [Authorize]
         public async Task<ActionResult<ResponseDto>> AddOrder(AddOrderDto dto)
         {
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
             var UserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             if (UserId == null)
             {
                 _responseDto.Errormessage = "Please login to Bid";
                 return Unauthorized(_responseDto);
             }
-            var bid = await _bidService.GetBidById(dto.BidId);
+            var bid = await _bidService.GetBidById(dto.BidId,token);
             if (!string.IsNullOrEmpty(bid.ErrorMessage))
             {
                 _responseDto.Errormessage = bid.ErrorMessage;
@@ -58,6 +59,7 @@ namespace ORDERSERVICE.Controllers
 
         }
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<ResponseDto>> GetOrder()
         {
             var response=await _orderService.GetOrders();
@@ -65,14 +67,16 @@ namespace ORDERSERVICE.Controllers
             return Ok(_responseDto);
         }
         [HttpGet("{Id}")]
+        [Authorize]
         public async Task<ActionResult<ResponseDto>>GetOrderbyId(Guid Id)
         {
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
             var order = await _orderService.GetOrderById(Id);
             if(order == null)
             {
                 return NotFound(_responseDto);
             }
-            var bid = await _bidService.GetBidById(order.BidId);
+            var bid = await _bidService.GetBidById(order.BidId,token);
             if (bid.ProductId==Guid.Empty)
             {
                 return NotFound(_responseDto);
@@ -81,7 +85,8 @@ namespace ORDERSERVICE.Controllers
             _responseDto.Result= order;
             return Ok(_responseDto);
         }
-        [HttpDelete]
+        [HttpDelete("{Id}")]
+        [Authorize]
         public async Task<ActionResult<ResponseDto>>DeleteOrder(Guid Id)
         {
             var order = await _orderService.GetOrderById(Id);
@@ -94,18 +99,22 @@ namespace ORDERSERVICE.Controllers
 
         }
         [HttpPost("Pay")]
+        [Authorize]
         public async Task<ActionResult<ResponseDto>> MakePayments(StripeRequestDto stripeRequest)
         {
-            var striperequest = await _orderService.MakePayments(stripeRequest);
+              var token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
+            var striperequest = await _orderService.MakePayments(stripeRequest, token);
             _responseDto.Result = striperequest;
             return Ok(_responseDto);
         }
         [HttpPost("validate/{Id}")]
+        [Authorize]
 
         public async Task<ActionResult<ResponseDto>> validatePayment(Guid Id)
         {
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
             /*     var token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];*/
-            var res = await _orderService.ValidatePayments(Id);
+            var res = await _orderService.ValidatePayments(Id, token);
 
             if (res)
             {

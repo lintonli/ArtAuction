@@ -2,6 +2,7 @@
 @inject HttpClient http;
 @inject NavigationManager NavigationManager;
 @inject IJSRuntime _jsRuntime;
+@inject AuthService authentication;
 
 
 <div class="container">
@@ -23,17 +24,18 @@
 
             <div class="form-group">
                 <label for="Email">Email</label>
-                <input type="text" class="form-control" @bind-value="user.Email" id="Description" placeholder="User Email">
+                <input type="email" class="form-control" @bind-value="user.Email" id="Description" placeholder="User Email">
             </div>
+               
 
             <div class="form-group">
                 <label for="PhoneNumber">Phone Number</label>
-                <input type="number" class="form-control" @bind-value="user.PhoneNumber" id="PhoneNumber" placeholder="User Number">
+                <input type="tel" class="form-control" @bind-value="user.PhoneNumber" id="PhoneNumber" placeholder="User Number">
             </div>
 
             <div class="form-group">
                 <label for="Password">Password</label>
-                <input type="text" class="form-control" @bind-value="user.Password" id="Password" placeholder="User Password">
+                <input type="password" class="form-control" @bind-value="user.Password" id="Password" placeholder="User Password">
             </div>
             <button type="button" @onclick="Register" class="mt-4 btn btn-primary">Register</button>
             <p class="mt-2">Already a member? <button @onclick="ToggleForm" class="btn btn-link">Login</button></p>
@@ -43,11 +45,11 @@
         {
             <div class="form-group">
                 <label for="Email">Email</label>
-                <input type="text" class="form-control" @bind-value="GetLoginuser.Email" id="Description" placeholder="User Email">
+                <input type="email" class="form-control" @bind-value="GetLoginuser.UserName" id="Description" placeholder="User Email">
             </div>
             <div class="form-group">
                 <label for="Password">Password</label>
-                <input type="text" class="form-control" @bind-value="GetLoginuser.Password" id="Password" placeholder="User Password">
+                <input type="password" class="form-control" @bind-value="GetLoginuser.Password" id="Password" placeholder="User Password">
             </div>
             <button type="button" @onclick="LoginUser" class="mt-4 btn btn-primary">Login</button>
             <p class="mt-2">Not a member yet? <button @onclick="ToggleForm" class="btn btn-link">Register</button></p>
@@ -67,50 +69,57 @@
 
     [Parameter]
     public EventCallback<User> RegUser { get; set; }
-    protected override async Task OnInitializedAsync()
-    {
-        var users = await http.GetFromJsonAsync<List<User>>("sample-data/User.json");
-        if (users.Any())
-        {
-            Users = users;
-        }
-    }
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     var users = await http.GetFromJsonAsync<List<User>>("sample-data/User.json");
+    //     if (users.Any())
+    //     {
+    //         Users = users;
+    //     }
+    // }
     public async void Register()
     {
-        await RegUser.InvokeAsync(user);
-        NavigationManager.NavigateTo("/");
+        // await RegUser.InvokeAsync(user);
+        //NavigationManager.NavigateTo("/");
+        var registerrequest = new User()
+            {
+                Name = user.Name,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Password = user.Password
+            };
+            await authentication.Register(registerrequest);
+            await RegUser.InvokeAsync(user);
+            await _jsRuntime.InvokeVoidAsync("ShowMessage", "Success");
+            NavigationManager.NavigateTo("/");
     }
     public async Task LoginUser()
     {
-        if(Users!= null)
-        {
-            await _jsRuntime.InvokeVoidAsync("ShowMessage", "success", $"Welcome, {user.Name}");
+        var loginRequest = new LogInUser()
+            {
+                UserName = GetLoginuser.UserName,
+                Password = GetLoginuser.Password
+            };
+        var response = await authentication.Login(loginRequest);
+      
 
+        if(!string.IsNullOrEmpty(response.Token))
+        {
+            await _jsRuntime.InvokeVoidAsync("ShowMessage", "success", $"Welcome, {GetLoginuser.UserName}");
             NavigationManager.NavigateTo("/Dashboard");
         }
+        //if(Users!= null)
+        //{
+          //  await _jsRuntime.InvokeVoidAsync("ShowMessage", "success", $"Welcome, {user.Name}");
+          //
+            //NavigationManager.NavigateTo("/Dashboard");
+        //}
         else
         {
             await _jsRuntime.InvokeVoidAsync("ShowMessage", "error", "Invalid Credentials");
         }
 
-       // var use = Users.Find(x => x.Email == GetLoginuser.Email);
-
-
-
-         //var isValidPassword = use != null && use.Password == GetLoginuser.Password;
-
-        //if (isValidPassword)
-         //{
-         //await _jsRuntime.InvokeVoidAsync("ShowMessage", "success", $"Welcome, {use.Name}");
-         //Console.WriteLine($"Welcome, {use.Name}");
-         //UserState.LoginUser(); // Update user state
-        //NavigationManager.NavigateTo("/");
-         //}
-        //else
-        //{
-         // await _jsRuntime.InvokeVoidAsync("ShowMessage", "error", "Invalid Credentials");
-          //Console.WriteLine("Invalid Credentials");
-         //}
+      
     }
 
     private void ToggleForm()

@@ -1,6 +1,10 @@
 ﻿
 @page "/AddProduct"
 @inject NavigationManager Navigation;
+@inject TokenProvider tokenProvider;
+@inject CategoryService categoryService;
+@inject ProductService productService;
+@inject IJSRuntime _jsRuntime;
 
 <h3>AddProduct</h3>
 <div class="container">
@@ -15,7 +19,7 @@
                 <img src="/Icons/logout_FILL0_wght400_GRAD0_opsz24.svg" alt="" />
 
             </div>
-            <a href="/">Logout</a>
+            <div @onclick=Logout>Logout</div>
         </div>
     </div>
     <div class="sidjjebar">
@@ -43,9 +47,20 @@
             <InputText @bind-Value="newProduct.Image" />
             <label for="Description">Description</label>
             <InputText @bind-Value="newProduct.Description" />
+            <label for="category">Category:</label>
+             <InputSelect id="category" @bind-Value="newProduct.CategoryId">
+            <option value=""></option>
+                  
+                    @foreach (var category in categories)
+            {
+                <option value="@category.Id">@category.Name</option>
+            }
+        </InputSelect>
             <label for="Price">Bidding Price</label>
             <InputNumber @bind-Value="newProduct.Price" />
-            <button type="button" @onclick="Addproduct" class="mt-4 btn btn-primary">Add Product</button>
+            <label for="Time">EndTIme</label>
+            <InputDate id="date"@bind-Value="newProduct.EndTime"></InputDate>
+            <button  class="mt-4 btn btn-primary">Add Product</button>
             </div>
         </EditForm>
            
@@ -53,16 +68,31 @@
     </div>
 </div>
 @code {
-    public List<Product> products { get; set; } = new List<Product>();
-    public Product newProduct = new Product();
-    private void Addproduct()
-    {
+    public List<ProductDto> products { get; set; } = new List<ProductDto>();
+    private List<CategoryDto> categories = new List<CategoryDto>();
 
+    protected override async Task OnInitializedAsync()
+    {
+        categories = await categoryService.GetCategoriesAsync();
+        foreach (var category in categories)
+
+        {
+            Console.WriteLine(category.Name);                  
+        }
     }
+    public ProductDto newProduct = new ProductDto();
+
     private async Task HandleValidSubmit()
     {
-        products.Add(newProduct);
-        newProduct = new Product();
-        Navigation.NavigateTo("/MyProducts");
+        await productService.AddProduct(newProduct);
+        await _jsRuntime.InvokeVoidAsync("ShowMessage", "success", $"{newProduct.Name} added successfully");
+        //Navigation.NavigateTo("/MyProducts");
+    }
+    public async Task Logout()
+    {
+
+        await tokenProvider.RemoveItemAsync();
+        Navigation.NavigateTo("/");
+
     }
 }

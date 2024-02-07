@@ -2,6 +2,7 @@
 using AUTHSERVICE.Models.Dtos;
 using AUTHSERVICE.Service.IService;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -73,6 +74,7 @@ namespace AUTHSERVICE.Controllers
             return BadRequest(_responseDto);
         }
         [HttpGet("{Id}")]
+       
         public async Task<ActionResult<ResponseDto>> GetUser(string Id)
         {
             var res = await _userService.GetUserById(Id);
@@ -88,6 +90,18 @@ namespace AUTHSERVICE.Controllers
             _responseDto.ErrorMessage = "User Not found ";
             _responseDto.IsSuccess = false;
             return NotFound(_responseDto);
+        }
+        [HttpGet("Users")]
+        [Authorize(Roles ="Admin")]
+        public async Task<ActionResult<ResponseDto>> GetAllUsers()
+        {
+            var user = await _userService.GetUsers();
+            if(user != null)
+            {
+                _responseDto.Result = user;
+            }
+            _responseDto.ErrorMessage = "No Users Found";
+            return Ok(_responseDto);
         }
     }
 }

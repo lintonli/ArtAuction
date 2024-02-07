@@ -8,6 +8,6 @@ namespace BidService.Services.IServices
         Task<List<Bid>>GetAllBids();
         Task<Bid> GetBidById(Guid Id);
         Task<string> DeleteBid(Bid bid);
-   /*     Task<List<Bid>>GetBidByUserId(Guid userId);*/
+       Task<List<Bid>>GetBidByUserId(Guid userId);
     }
 }

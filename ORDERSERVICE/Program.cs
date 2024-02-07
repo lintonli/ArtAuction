@@ -31,6 +31,14 @@ builder.Services.AddHttpClient("Bid", c => c.BaseAddress = new Uri(builder.Confi
 builder.Services.AddHttpClient("User", c => c.BaseAddress = new Uri(builder.Configuration.GetValue<string>("ServiceURl:UserServiceURL")));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 Stripe.StripeConfiguration.ApiKey = builder.Configuration.GetValue<string>("Stripe:Key");
+
+builder.Services.AddCors(options => options.AddPolicy("policy1", build =>
+{
+
+    build.AllowAnyOrigin();
+    build.AllowAnyHeader();
+    build.AllowAnyMethod();
+}));
 var app = builder.Build();
 
 
@@ -49,5 +57,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseCors("policy1");
 
 app.Run();

@@ -19,27 +19,28 @@ namespace BidService.Controllers
         private readonly ResponseDto _responseDto;
         private readonly IMapper _mapper;
         private readonly BidResponseDto _bidResponse;
-       
+
         public BidController(IBid bidService, IMapper mapper, IProduct productservice)
         {
             _bidService = bidService;
             _responseDto = new ResponseDto();
             _mapper = mapper;
             _productservice = productservice;
-            _bidResponse  = new BidResponseDto();   
+            _bidResponse = new BidResponseDto();
 
         }
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<ResponseDto>>AddBid(BidDto newBid)
+        public async Task<ActionResult<ResponseDto>> AddBid(BidDto newBid)
         {
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
             var UserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             if (UserId == null)
             {
                 _responseDto.Errormessage = "Please login to Bid";
                 return Unauthorized(_responseDto);
             }
-            var product = await _productservice.GetProductById(newBid.ProductId);
+            var product = await _productservice.GetProductById(newBid.ProductId,token);
             if (string.IsNullOrEmpty(product.Name))
             {
                 _responseDto.Errormessage = "Invalid Values";
@@ -47,37 +48,41 @@ namespace BidService.Controllers
             }
             var prod = _mapper.Map<Bid>(newBid);
             prod.UserId = Guid.Parse(UserId);
-            if(newBid.BidPrice<= product.HighestBid)
+            if (newBid.BidPrice <= product.HighestBid)
             {
                 _responseDto.Errormessage = "Bid Higher";
                 return BadRequest(_responseDto);
             }
-          
 
-            var Highestbid = await _productservice.updateHighest(product.Id, new UpdateHighestBidDto() { HighestBid = prod.BidPrice });
-         
+
+
+            var Highestbid = await _productservice.updateHighest(product.Id, new UpdateHighestBidDto() { HighestBid = prod.BidPrice },token);
+
             var res = await _bidService.AddBid(prod);
-            
+
             _responseDto.Result = res;
             return Created($"{prod.Id}", _responseDto);
         }
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<ResponseDto>> GetAll()
         {
-            var res =await _bidService.GetAllBids();
-            _responseDto.Result= res;
+            var res = await _bidService.GetAllBids();
+            _responseDto.Result = res;
             return Ok(_responseDto);
         }
         [HttpGet("{Id}")]
+        [Authorize]
         public async Task<ActionResult<BidResponseDto>> GetBid(Guid Id)
-        { 
+        {
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
             var bid = await _bidService.GetBidById(Id);
             if (bid == null)
             {
                 _bidResponse.ErrorMessage = "Bid does not exist";
                 return NotFound(_bidResponse);
             }
-            var product= await _productservice.GetProductById(bid.ProductId);
+            var product = await _productservice.GetProductById(bid.ProductId,token);
             if (string.IsNullOrEmpty(product.Name))
             {
                 _bidResponse.ErrorMessage = "Product does not exist";
@@ -89,18 +94,39 @@ namespace BidService.Controllers
             _bidResponse.UserId = bid.UserId;
             _bidResponse.Product = product;
 
-  
-          
-           /* var productDto = new ProductDto
-            {
-                Id = product.Id,
-                Name = product.Name,
-                Image = product.Image,
-                HighestBid = product.HighestBid,
-                BiddingState = product.BiddingState
-            };*/
-        
+
+
+            /* var productDto = new ProductDto
+             {
+                 Id = product.Id,
+                 Name = product.Name,
+                 Image = product.Image,
+                 HighestBid = product.HighestBid,
+                 BiddingState = product.BiddingState
+             };*/
+
             return Ok(_bidResponse);
         }
+        [HttpGet("User")]
+        [Authorize]
+        public async Task<ActionResult<List<Bid>>> GetBidbyUserId()
+        {
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Split(" ")[1];
+            var UserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (UserId == null)
+            {
+                _responseDto.Errormessage = "Please login to Bid";
+                return Unauthorized(_responseDto);
+            }
+            var products = await _productservice.GetAllProducts(token);
+            var bids = await _bidService.GetBidByUserId(Guid.Parse(UserId));
+            return Ok(bids);
+
+        }
+
+
+
+
     }
+    
 }

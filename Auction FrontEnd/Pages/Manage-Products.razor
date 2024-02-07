@@ -1,5 +1,8 @@
 ﻿@page "/manageprods"
 @inject HttpClient http;
+@inject NavigationManager Navigation;
+@inject ProductService productService;
+@inject TokenProvider tokenProvider;
 
 <div class="container">
     <div class="nav">
@@ -13,7 +16,7 @@
                 <img src="/Icons/logout_FILL0_wght400_GRAD0_opsz24.svg" alt="" />
 
             </div>
-            <a href="/">Logout</a>
+            <div @onclick=Logout>Logout</div>
         </div>
     </div>
 
@@ -71,19 +74,26 @@
 
     protected override async Task OnInitializedAsync()
     {
-        products = await http.GetFromJsonAsync<List<Product>>("sample-data/Product.json");
+        // products = await http.GetFromJsonAsync<List<Product>>("sample-data/Product.json");
+        products = await productService.GetProductsAsync();
     }
 
-    private void DeleteUser(Guid Id)
+    private async void DeleteUser(Guid Id)
     {
-        // Logic to delete user
-        // In a real application, this would involve a backend service
+        Console.WriteLine("dfdffdf");
+        await productService.deleteProduct(Id);
     }
 
-    private void Edit(Guid Id)
+    private async void Edit(Guid Id)
     {
-        // Logic to Edit
-        // In a real application, this would involve a backend service or mail API
+        //await productService.updateProduct(Id, product);
+    }
+    public async Task Logout()
+    {
+
+        await tokenProvider.RemoveItemAsync();
+        Navigation.NavigateTo("/");
+
     }
 
 }

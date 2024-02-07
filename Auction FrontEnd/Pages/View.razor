@@ -1,56 +1,70 @@
 ﻿@page "/ViewItem/{Id}"
-@inject HttpClient http;
+@inject ProductService _productService
+@inject BidService _bidService;
 @inject NavigationManager navigation;
+@inject IJSRuntime _jsRuntime;
 
-@if (product != null)
-{
-    <div>
-        <img src="@product.Image" alt=""/>
-        <h2>@product.Name</h2>
-        <p>Seller: @product.SellerName</p>
-        <p>Price:@product.Price$</p>
-        <p>Highest Bid: @product.HighestBid</p>
-        <p>Start Time:@product.StartTime</p>
-        <p>End Time: @product.EndTime</p>
-        <p>Bidding State: @product.BiddingState$</p>
-    </div>
-    <form>
-        <label for="Bid">BID</label>
-        <input type="text" placeholder="bid"/>
-    </form>
-}
 
-else
-{
-    <p>Loading........</p>
-}
-<button class="now" @onclick="Bid">Bid Now</button>
-<button @onclick="GoBack"> Go Back</button>
+<div>
 
-@code{
-   
-    public Product product { get; set; } = new Product();
+<h1>hello world</h1>
+<div class="ProductDetails d-flex flex-column gap-2">
+    <span class=" d-flex">
+    <label for="">Art Name:</label>
+    @product.Name
+</span>
+<span class=" d-flex">
+    <label for="">End Time:</label>
+    @product.EndTime
+</span>
+<span class=" d-flex">
+    <label for="">Highest bid:</label>
+    @product.HighestBid
+</span>
+<span class=" d-flex">
+    <label for="">Start:</label>
+    @product.StartTime</span>
+</div>
 
+<div class="FormContainer mt-4">
+    <input type="number" placeholder="Enter Bid Amount" @bind=bid.BidPrice>
+    <button class="btn btn-primary mt-2" @onclick="PlaceBid">Place Bid</button>
+
+</div>
+</div>
+@code {
     [Parameter]
     public string Id{get; set;}
+    public Product product {get;set;}
+    public BidDto bid {get;set;}
 
-    protected override async Task OnInitializedAsync(){
+    protected override async Task OnInitializedAsync()
+    {
+        product=new Product();
+        bid = new BidDto();
+        await GetProductDetails();
+    }
 
-        if (Guid.TryParse(Id, out var guidId))
-        {
-            await LoadProduct(guidId);
+
+    public async Task GetProductDetails()
+    {
+        Guid productId=Guid.Parse(Id);
+        product=  await _productService.GetProductByIdAsync(productId);
+        //  Console.WriteLine(product.Name);
+        // await _productService.GetProductsAsync();
+
+    }
+
+    public async Task PlaceBid()
+    {
+        bid.ProductId=product.Id;
+        //bid.BidCount=product.BidCount;
+        //bid.HighestBid=product.HighestBid;
+        await _bidService.AddBid(bid);
+        await _jsRuntime.InvokeVoidAsync("ShowMessage", "Success", "Bid Placed successfully");
+        navigation.NavigateTo("/Biddings");
+        ///.  Console.WriteLine("Your bid Amount is "+ bid.BidPrice);
+
         }
-    }
-    public async Task LoadProduct(Guid guidId){
-        var products = await http.GetFromJsonAsync<List<Product>>("sample-data/Product.json");
-        product = products.FirstOrDefault(p => p.Id == guidId);
-          
-        
-    }
-    private void GoBack(){
-        navigation.NavigateTo("/Bidder");
-    }
-    public void Bid(){
 
-    }
 }

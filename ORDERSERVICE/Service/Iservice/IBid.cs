@@ -4,6 +4,6 @@ namespace ORDERSERVICE.Service.Iservice
 {
     public interface IBid
     {
-        Task<BidResponseDto> GetBidById(Guid Id);
+        Task<BidResponseDto> GetBidById(Guid Id,string token);
     }
 }

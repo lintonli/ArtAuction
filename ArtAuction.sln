@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BidService", "BidService\Bi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CategoryService", "CategoryService\CategoryService.csproj", "{A1F3C662-9CF0-4E54-9F82-FF048BC7141D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ORDERSERVICE", "ORDERSERVICE\ORDERSERVICE.csproj", "{978324B2-F0D7-47A1-BBDE-78D4F69112F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ORDERSERVICE", "ORDERSERVICE\ORDERSERVICE.csproj", "{978324B2-F0D7-47A1-BBDE-78D4F69112F5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auction Gateway", "Auction Gateway\Auction Gateway.csproj", "{49EAA926-BDBE-44C6-A8EC-7631D6253BCF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{978324B2-F0D7-47A1-BBDE-78D4F69112F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{978324B2-F0D7-47A1-BBDE-78D4F69112F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{978324B2-F0D7-47A1-BBDE-78D4F69112F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49EAA926-BDBE-44C6-A8EC-7631D6253BCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49EAA926-BDBE-44C6-A8EC-7631D6253BCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49EAA926-BDBE-44C6-A8EC-7631D6253BCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49EAA926-BDBE-44C6-A8EC-7631D6253BCF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,6 +1,9 @@
 ﻿@page "/Checkout"
 @inject HttpClient http;
 @inject NavigationManager navigation;
+@inject BidService bidService;
+@inject ProductService productService;
+@inject TokenProvider tokenProvider;
 
 <h3>Orders</h3>
 <div class="container">
@@ -15,7 +18,7 @@
                 <img src="/Icons/logout_FILL0_wght400_GRAD0_opsz24.svg" alt="" />
 
             </div>
-            <a href="/">Logout</a>
+            <div @onclick=Logout>Logout</div>
         </div>
     </div>
     <div class="sidjjebar">
@@ -39,38 +42,51 @@
         </div>
     </div>
     <div class="body">
-        @if(wonProducts != null && wonProducts.Any())
-        {
-            foreach(var product in wonProducts)
+        
+        
+            @foreach (var bid in bids)
             {
                 <div class="item">
-                    <img src="@product.Image" alt=""/>
+                    <img src="@GetProducts(bid.ProductId).Image" alt="" />
                     <div class="item-details">
-                        <h2>@product.Name</h2>
-                        <p>Amount: @product.Price$</p>
-                        <button class="btn" @onclick="() => ProcessPayment(product)">Pay Now</button>
+                    <h2>@GetProducts(bid.ProductId).Name</h2>
+                    <p>@GetProducts(bid.ProductId).HighestBid</p>
+@*                         <button class="btn" @onclick="() => ProcessPayment(bid.Id)">Pay Now</button> *@
                     </div>
                 </div>
             }
-        }
+        
     </div>
 </div>
 @code {
-    public List<Product> wonProducts { get; set; } = new List<Product>();
+    public string Id{ get; set; }
+    public List<Product> Products { get; set; } = new List<Product>();
+    public List<Bid> bids { get; set; }
 
     //[Parameter]
     //public Guid Id{ get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        var products = await http.GetFromJsonAsync<List<Product>>("sample-data/Product.json");
-        wonProducts = products.Where(p => p.BiddingState=="Closed" && p.IsWinner).ToList();
+        Products = await productService.GetProductsAsync();
+        bids = await bidService.GetBidbUserId();
     }
-
+    public Product GetProducts(Guid ProductId)
+    {
+        var prod = Products.Find(x => x.Id == ProductId);
+        return prod ?? new Product();
+    }
     private void ProcessPayment(Product product)
     {
         // Implement the logic to process the payment
         // For now, it could simply navigate to a confirmation page
         navigation.NavigateTo("/PaymentConfirmation");
+    }
+    public async Task Logout()
+    {
+
+        await tokenProvider.RemoveItemAsync();
+        navigation.NavigateTo("/");
+
     }
 }

@@ -1,9 +1,13 @@
 ﻿@page "/Dashboard"
 @using System.Text
 @using System.Text.Json.Serialization
+@using Microsoft.AspNetCore.Authorization
 @inject HttpClient http;
 @inject NavigationManager Navigation;
+@inject TokenProvider tokenProvider;
 @inject IJSRuntime _jsRuntime;
+@inject ProductService productService;
+@attribute [Authorize]
 <div class="container">
     <div class="nav">
         <div class="logo">
@@ -16,7 +20,7 @@
                 <img src="/Icons/logout_FILL0_wght400_GRAD0_opsz24.svg" alt="" />
 
             </div>
-            <a href="/">Logout</a>
+            <div @onclick=Logout>Logout</div>
         </div>
     </div>
     <div class="body d-flex">
@@ -49,35 +53,40 @@
                 <div class="info2">
                     <p>@GetTimeRemaining(product.EndTime)</p><br />
                     <h2>@GetBiddingStatus(product.EndTime)</h2>
-                    <button class="now" @onclick="(_) => Bid(product.Id)">Bid Now</button>
+                    <button class="now" @onclick="() => Bid(product.Id)">Bid Now</button>
 
                 </div>
             </div>
             <div class="search">
-                <input type="text" id="search" />
+                <input type="text" id="search" @bind="searchTerm" @bind:event="oninput" />
                 <img src="/Icons/manage_search_FILL0_wght400_GRAD0_opsz24.svg" />
             </div>
 
             <div class="items">
-                @foreach (var prods in products)
-                {
-                    <div class="item1">
-                        <div class="info3">
-                            <img src="@prods.Image" alt="" />
-                            <h1>@prods.Name</h1>
-                            <div class="stat">
-                                <h3>Highest bid: @prods.HighestBid</h3>
-                                <p>@prods.BiddingState</p>
-                            </div>
-                            <div class="stat2">
-                                <h3>Start bid: @prods.Price</h3>
-                                <button class="btn" @onclick="(e => ViewItem(prods.Id))">View Item</button>
+               @if(FilteredProducts()==null)
+               {
+                    <p>Loading products...</p>
+                }else{
+                    @foreach (var prods in FilteredProducts())
+                    {
+                        <div class="item1">
+                            <div class="info3">
+                                <img src="@prods.Image" alt="" />
+                                <h1>@prods.Name</h1>
+                                <div class="stat">
+                                    <h3>Highest bid: @prods.HighestBid</h3>
+                                    <p>@prods.BiddingState</p>
+                                </div>
+                                <div class="stat2">
+                                    <h3>Start bid: @prods.Price</h3>
+                                    <button class="btn" @onclick="(e => ViewItem(prods.Id))">View Item</button>
+                                </div>
+
                             </div>
 
                         </div>
 
-                    </div>
-
+                    }
                 }
             </div>
         </div>
@@ -88,19 +97,27 @@
 @code{
     public List<Product> products { get; set; } = new List<Product>();
     public Product product { get; set; } = new Product();
+    private string searchTerm = string.Empty;
 
     [Parameter]
     public EventCallback OnShowMenu { get; set; }
 
     protected async override Task OnInitializedAsync()
     {
-        var prod = await http.GetFromJsonAsync<List<Product>>("Sample-data/Product.json");
-
-        if (prod.Any())
-        {
-            products = prod;
-        }
+        products = await productService.GetProductsAsync();
     }
+    public IEnumerable<Product> FilteredProducts()
+    {
+        if (string.IsNullOrWhiteSpace(searchTerm))
+        {
+            return products; // Return all products if the search term is empty
+        }
+
+        // Search by name or category (assuming your Product model has a Category property)
+        return products.Where(p => p.Name.ToLower().Contains(searchTerm.ToLower()));
+
+    }
+
 
     public void Bid(Guid Id){
         Navigation.NavigateTo($"/ViewItem/{Id}");
@@ -123,7 +140,13 @@
         _jsRuntime.InvokeVoidAsync("toogle_menu");
     }
 
+    public async Task Logout()
+    {
 
+        await tokenProvider.RemoveItemAsync();
+        Navigation.NavigateTo("/");
+
+    }
     
     
 

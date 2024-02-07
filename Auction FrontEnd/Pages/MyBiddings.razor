@@ -2,6 +2,9 @@
 @inject HttpClient http;
 @inject NavigationManager Navigation;
 @inject IJSRuntime _jsRuntime;
+@inject BidService bidService;
+@inject ProductService productService;
+@inject TokenProvider tokenProvider;
 <h3>My Biddings</h3>
 
 <div class="container">
@@ -18,7 +21,7 @@
                 <img src="/Icons/logout_FILL0_wght400_GRAD0_opsz24.svg" alt="" />
 
             </div>
-            <a href="/">Logout</a>
+            <div @onclick=Logout>Logout</div>
         </div>
     </div>
     @* <div class="sidjjebar">
@@ -46,70 +49,80 @@
          <Navbar></Navbar>
 
         </div>
-    <div class="body">
-        @if (Products != null && Products.Any())
-        {
-            @foreach(var Prod in Products)
+        <div class="body">
+
+            <div class="biddings">
+
+        
+            @if (bids != null)
             {
-                <div class="item">
-                    <img src="@Prod.Image" alt="" />
-                    <h2>@Prod.Name</h2>
-                    <p>Highest Bid: @Prod.HighestBid</p>
-                    <p>My bid: @Prod.Price</p>
-                    <p>Status:@GetStatus(Prod.EndTime)</p>
 
-                    @if (Prod.BiddingState=="Closed" && Prod.IsWinner)
-                    {
-                        <button @onclick="() => ProceedToCheckout(Prod.Id)">Checkout</button>
-                    }
-                    else if(IsBiddingActive(Prod.EndTime))
-                    {
-                        <button @onclick="() => BidAgain(Prod.Id)">Bid Again</button>
-                    }
 
-                </div>
+                @foreach (var bid in bids)
+                {
+                    <div class="items">
 
+
+                        <img src="@GetProducts(bid.ProductId).Image"/>
+                        <span class=" d-flex">
+                            <label for="">Name:</label>
+                            <p>@GetProducts(bid.ProductId).Name</p>
+                        </span>
+                        <span class=" d-flex">
+                            <label for="">Description:</label>
+                            <p>@GetProducts(bid.ProductId).Description</p>
+                        </span>
+                        <span class=" d-flex">
+                            <label for="">Status:</label>
+                            <p>@GetProducts(bid.ProductId).BiddingState</p>
+                        </span>
+                        <span class=" d-flex">
+                            <label for="">HighestBid:</label>
+                            <p>@GetProducts(bid.ProductId).HighestBid</p>
+                        </span>
+                        @if (GetProducts(bid.ProductId).BiddingState == "Active")
+                        {
+                            <button @onclick="()=> BidAgain(bid.ProductId)">Bid Again</button>
+                        }
+                        else if(GetProducts(bid.ProductId).BiddingState=="Closed" && GetProducts(bid.ProductId).Id == bid.UserId)
+                        {
+                            <button @onclick="()=> Checkout(bid.ProductId)">Check Out</button>
+                        }
+                    </div>
+
+                }
             }
-        }
-        else
-        {
-            <p>No biddings found......</p>
-        }
+
+      
+        </div>
+
     </div>
-
-
     </div>
    
 </div>
 @code {
-    public List<Product> Products { get; set; } = new List<Product>();
 
+
+    public List<Product> Products { get; set; } = new List<Product>();
+    public List<Bid> bids{ get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-
-        var Product = await http.GetFromJsonAsync<List<Product>>("sample-data/Product.json");
-
-        if (Product.Any())
-        {
-            Products = Product;
-        }
+        Products = await productService.GetProductsAsync();
+        bids = await bidService.GetBidbUserId();
     }
-    private bool IsBiddingActive(DateTime end)
+    public Product GetProducts(Guid ProductId)
     {
-        return end > DateTime.Now;
+        var prod = Products.Find(x => x.Id == ProductId);
+        return prod ?? new Product();
     }
-   
-    private string GetStatus(DateTime dateTime)
-    {
-        var timing = dateTime - DateTime.Now;
-        return timing > TimeSpan.Zero ? "Active" : "Closed";
-    }
-    private void ProceedToCheckout(Guid Id)
+
+    private void Checkout(Guid Id)
     {
        
         Navigation.NavigateTo($"/Checkout");
     }
+    
 
     private void BidAgain(Guid Id)
     {
@@ -119,6 +132,13 @@
     public void toogleMenu()
     {
         _jsRuntime.InvokeVoidAsync("toogle_menu");
+    }
+    public async Task Logout()
+    {
+
+        await tokenProvider.RemoveItemAsync();
+        Navigation.NavigateTo("/");
+
     }
 
 }

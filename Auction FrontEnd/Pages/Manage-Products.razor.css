@@ -55,6 +55,9 @@
     .admin-table tr:hover {
         background-color: #ddd;
     }
+    .admin-table tr td img{
+        height:100px;
+    }
 
     .admin-table button {
         padding: 5px 10px;

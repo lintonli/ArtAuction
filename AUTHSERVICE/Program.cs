@@ -27,6 +27,14 @@ builder.Services.AddScoped<IUser, UserService>();
 builder.Services.AddScoped<IJwt, JwtService>();
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("JwtOptions"));
 
+builder.Services.AddCors(options => options.AddPolicy("policy1", build =>
+{
+
+    build.AllowAnyOrigin();
+    build.AllowAnyHeader();
+    build.AllowAnyMethod();
+}));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -41,5 +49,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors("policy1");
 
 app.Run();

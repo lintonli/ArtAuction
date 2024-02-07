@@ -39,6 +39,11 @@ namespace PRODUCTSERVICE.Services
 
         }
 
+        public async Task<List<Product>> GetProductByUserId(Guid UserId)
+        {
+            return await _context.Products.Where(x => x .SellerId == UserId).ToListAsync();
+        }
+
         public async Task<List<Product>> GetProducts()
         {
             var prod = await _context.Products.ToListAsync();

@@ -11,6 +11,10 @@
     margin:10px;
        
 }
+.info{
+    padding:20px;
+    margin-left:10px;
+}
 
 .out img{
     object-fit:cover;
@@ -87,6 +91,19 @@
     display: grid;
     align-items:center;
     gap:20px;
+    
+}
+.item1{
+    height:400px;
+}
+.info3 img{
+    height:150px;
+}
+.info3 h1{
+    font-size:2rem;
+}
+.stat h3{
+    font-size:20px;
 }
 h1 {
     font-family: 'Irish Grover', system-ui;
@@ -120,7 +137,10 @@ h1 {
 }
 @media(min-width: 600px) {
     .items {
-        display: flex;
+        display: grid;
+        grid-template-columns:repeat(3,1fr);
+
+
     }
 
     .info3 img {

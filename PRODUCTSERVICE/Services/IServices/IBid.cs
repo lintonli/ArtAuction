@@ -4,7 +4,7 @@ namespace PRODUCTSERVICE.Services.IServices
 {
     public interface IBid
     {
-        Task<List<BidDto>> GetAllBids();
+        Task<List<BidDto>> GetAllBids(string token);
 
     }
 }
